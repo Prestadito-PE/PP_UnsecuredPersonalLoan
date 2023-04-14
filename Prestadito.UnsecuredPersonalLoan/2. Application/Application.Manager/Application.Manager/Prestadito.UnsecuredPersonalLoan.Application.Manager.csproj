@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="FluentValidation" Version="11.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\4. Infrastructure\Infrastructure.MainModule\Infrastructure.MainModule\Prestadito.UnsecuredPersonalLoan.Infrastructure.MainModule.csproj" />
-    <ProjectReference Include="..\..\Application.Dto\Application.Dto\Prestadito.UnsecuredPersonalLoan.Application.Dto.csproj" />
+    <Folder Include="QueryBuilder\SortDefinition\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\4. Infrastructure\Infrastructure.Data\Infrastructure.Data\Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\..\..\4. Infrastructure\Infrastructure.MainModule\Infrastructure.MainModule\Prestadito.UnsecuredPersonalLoan.Infrastructure.Proxies.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,8 @@ using Prestadito.UnsecuredPersonalLoan.Domain.MainModule.Core;
 
 namespace Prestadito.UnsecuredPersonalLoan.Domain.MainModule.Entities
 {
-    public class PersonalEntity : BaseAuditEntity
+    [BsonIgnoreExtraElements]
+    public class PersonalEntity : AuditEntity
     {
         [BsonElement("strDoi")]
         public string StrDoi { get; set; }

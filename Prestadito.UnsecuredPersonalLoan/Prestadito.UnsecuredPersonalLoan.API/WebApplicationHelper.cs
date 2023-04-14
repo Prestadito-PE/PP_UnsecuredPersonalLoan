@@ -1,12 +1,8 @@
 ﻿using Microsoft.OpenApi.Models;
-using Prestadito.UnsecuredPersonalLoan.API.Controller;
-using Prestadito.UnsecuredPersonalLoan.Application.Manager.Endpoints;
+using Prestadito.UnsecuredPersonalLoan.API.Endpoints;
 using Prestadito.UnsecuredPersonalLoan.Application.Manager.Extensions;
-using Prestadito.UnsecuredPersonalLoan.Application.Manager.Interfaces;
-using Prestadito.UnsecuredPersonalLoan.Application.Services.Interfaces;
-using Prestadito.UnsecuredPersonalLoan.Application.Services.Services;
-using Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.Settings;
-using Prestadito.UnsecuredPersonalLoan.Infrastructure.MainModule.Extensions;
+using Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.Extensions;
+using Prestadito.UnsecuredPersonalLoan.Infrastructure.Proxies.Settings.Extensions;
 
 namespace Prestadito.UnsecuredPersonalLoan.API
 {
@@ -18,36 +14,47 @@ namespace Prestadito.UnsecuredPersonalLoan.API
 
             var configuration = provider.GetRequiredService<IConfiguration>();
 
-            builder.Services.AddMongoDbContext(configuration);
-
-            builder.Services.AddScoped<IDataService, DataService>();
-            builder.Services.AddScoped<IPersonalsController, PersonalsController>();
-
+            builder.Services.AddDBServices(configuration);
+            builder.Services.AddProxies();
+            builder.Services.AddUnsecuredPersonalLoanControllers();
             builder.Services.AddValidators();
-
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Prestadio.Micro.UnsecuredPersonalLoan.API",
+                    Title = "Test Deploy with main branch",
+                    Description = "ASP.NET Core Web API Control Schedule System",
+                    TermsOfService = new Uri("https://prestadito.pe/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Prestadito.pe",
+                        Email = "contacto@prestadito.pe",
+                        Url = new Uri("https://prestadito.pe"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://prestadito.pe"),
+                    }
                 });
             });
-
-            builder.Services.AddHealthChecks()
-                .AddCheck<MongoDBHealthCheck>(nameof(MongoDBHealthCheck));
 
             return builder.Build();
         }
 
         public static WebApplication ConfigureWebApplication(this WebApplication app)
         {
-            if (app.Environment.IsDevelopment())
+            //if (app.Environment.IsDevelopment())
+            //{
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                options.SwaggerEndpoint("v1/swagger.json", "Prestadito.Micro.UnsecuredPersonalLoan.API");
+            });
+            //}
 
             app.UseUnsecuredPersonalLoanEndpoints();
 

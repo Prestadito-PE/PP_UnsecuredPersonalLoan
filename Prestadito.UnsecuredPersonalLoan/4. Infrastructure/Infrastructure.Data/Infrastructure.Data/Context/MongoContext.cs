@@ -1,32 +1,25 @@
 ﻿using MongoDB.Driver;
+using Prestadito.UnsecuredPersonalLoan.Domain.MainModule.Entities;
 using Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.Interface;
+using Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.Utilities;
 
 namespace Prestadito.UnsecuredPersonalLoan.Infrastructure.Data.Context
 {
-    public class MongoContext
+    public class MongoContext: IMongoContext
     {
-        private readonly MongoClient client;
         private readonly IMongoDatabase database;
 
         public MongoContext(IUnsecuredPersonalLoanDBSettings settings)
         {
-            client = new MongoClient(settings.ConnectionURI);
+            var client = new MongoClient(settings.ConnectionURI);
             database = client.GetDatabase(settings.DatabaseName);
         }
 
-        public IMongoClient Client
+        public IMongoCollection<PersonalEntity> Personals
         {
             get
             {
-                return client;
-            }
-        }
-
-        public IMongoDatabase Database
-        {
-            get
-            {
-                return database;
+                return database.GetCollection<PersonalEntity>(CollectionsName.colPersonals);
             }
         }
     }
